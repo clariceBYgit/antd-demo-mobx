@@ -15,29 +15,26 @@ import { UserOutlined, LockOutlined} from '@ant-design/icons'
 
 import './login.less'
 
-import { connect } from 'react-redux'
-import { login } from '../../actions/user'
 import { Redirect } from 'react-router-dom'
+import { observer,inject } from 'mobx-react'
 
-const mapState = state => ({
-    isLogin: state.user.isLogin,
-    isLoading: state.user.isLoading
-})
 
 @Form.create()
 
-@connect(mapState, { login })
-
+@inject('userStore')
+@observer
 class Login extends Component {
-  
-
-    
+  constructor(){
+      super()
+      this.state = {}
+      
+  }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields( (err, values) => {
             if (!err) {
                 // console.log('Received values of form: ', values);
-                this.props.login(values)
+                this.props.userStore.login(values)
                     .then(res => {
                         console.log(res)
                     })
@@ -45,10 +42,12 @@ class Login extends Component {
         })
     }   
     render() {
+       
        const { getFieldDecorator } = this.props.form
-
+        let { userStore:{isLoading, isLogin}} = this.props
+        console.log(isLogin)
         return (
-            this.props.isLogin 
+            isLogin 
             
             ?
 
@@ -57,7 +56,7 @@ class Login extends Component {
             <Card title='QX ADMIN登录'
                 className="qx-login-wrapper"
             >
-            <Spin spinning={this.props.isLoading} size="large">
+            <Spin spinning={isLoading} size="large">
                 <Form
                     className="login-form"
                     onSubmit={this.handleSubmit}

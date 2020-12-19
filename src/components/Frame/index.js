@@ -18,23 +18,22 @@ import logo from './logo.png'
 
 import { withRouter } from 'react-router-dom'
 
-import { connect} from 'react-redux'
-
+import { inject, observer } from 'mobx-react'
 
 const { Header, Content, Sider } = Layout
 
 
-const mapState = state => {
-  return {
-    notificationsCount: state.notifications.list.filter( item => item.hasRead === false).length,
-    avatar:state.user.avatar,
-    displayName:state.user.displayName
-  }
-}
+// const mapState = state => {
+//   return {
+//     notificationsCount: state.notifications.list.filter( item => item.hasRead === false).length,
+//     avatar:state.user.avatar,
+//     displayName:state.user.displayName
+//   }
+// }
 
 // 装饰器模式
 @withRouter
-@connect(mapState, { getNotificationsList, logout})
+// @connect(mapState, { getNotificationsList, logout})
 
 class Frame extends Component {
 

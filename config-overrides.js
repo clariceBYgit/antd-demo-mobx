@@ -10,7 +10,7 @@ const {
     override, 
     fixBabelImports, 
     addLessLoader,
-    addDecoratorsLegacy 
+    addDecoratorsLegacy,
 } = require ('customize-cra')
 
 // 从外面单独的文件中来设置主题颜色  theme
