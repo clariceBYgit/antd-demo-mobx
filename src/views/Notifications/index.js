@@ -8,29 +8,6 @@ import {
     Spin
 } from 'antd'
 
-import { connect } from 'react-redux'
-
-import { markNotificationAsReadById, marAllNotificationsAsRead } from '../../actions/notifications'
-
-const mapState = state => {
-  const {
-    list,
-    isLoading
-  } = state.notifications
-  
-  return {
-    list,
-    isLoading
-    
-  }
-}
-
-
-  @connect( 
-    mapState, 
-    { markNotificationAsReadById, marAllNotificationsAsRead }
-    )
-
 
 class Notifications extends Component {
     render() {

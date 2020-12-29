@@ -16,10 +16,10 @@ import './index.less'
 
 // mobx
 import { Provider } from 'mobx-react'
-import userStore from './store'
+import {userStore, notifications} from './store'
 
 ReactDOM.render(
-  <Provider userStore={userStore}>
+  <Provider userStore={userStore} notifications={notifications}>
     <ConfigProvider locale={zhCN}>
       {/* locale={zhCN} 设置国际化语言 */}
       <Router>

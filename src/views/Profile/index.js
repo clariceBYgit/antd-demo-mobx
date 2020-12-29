@@ -9,16 +9,8 @@ import {
 
 import axios from 'axios'
 
-import { connect } from 'react-redux'
 
-
-import { changeAvatar } from '../../actions/user'
-
-const mapState = state => ({
-    avatarUrl: state.user.avatar
-})
  
-@connect(mapState, { changeAvatar })
 
 class Profile extends Component {
 

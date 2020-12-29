@@ -8,10 +8,7 @@ import { inject, observer } from 'mobx-react'
 
 const menus = adminRoutes.filter(route => route.isNav === true)
 
-// const mapState = state => ({
-//   isLogin: state.user.isLogin,
-//   role: state.user.role
-// })
+
 @inject('userStore')
 
 @observer class App extends Component{

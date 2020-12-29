@@ -17,6 +17,7 @@ import './login.less'
 
 import { Redirect } from 'react-router-dom'
 import { observer,inject } from 'mobx-react'
+import { toJS } from 'mobx'
 
 
 @Form.create()
@@ -26,17 +27,23 @@ import { observer,inject } from 'mobx-react'
 class Login extends Component {
   constructor(){
       super()
-      this.state = {}
+      this.state = {
+        userInfoState : null
+      }
       
   }
     handleSubmit = (e) => {
+        const { userStore } = this.props
         e.preventDefault();
         this.props.form.validateFields( (err, values) => {
             if (!err) {
                 // console.log('Received values of form: ', values);
                 this.props.userStore.login(values)
                     .then(res => {
-                        console.log(res)
+                        this.state({
+                            userInfoState: userStore.userInfo
+                        })
+                        console.log(this.userInfoState)
                     })
             }
         })
@@ -44,19 +51,18 @@ class Login extends Component {
     render() {
        
        const { getFieldDecorator } = this.props.form
-        let { userStore:{isLoading, isLogin}} = this.props
-        console.log(isLogin)
+        let { userStore:{userInfo, isLogin}} = this.props
         return (
             isLogin 
             
             ?
 
-            <Redirect to='/admin' />
+            <Redirect userInfoState= {this.state.userInfoState} to='/admin' />
             :
             <Card title='QX ADMIN登录'
                 className="qx-login-wrapper"
             >
-            <Spin spinning={isLoading} size="large">
+            <Spin spinning={userInfo.isLoading} size="large">
                 <Form
                     className="login-form"
                     onSubmit={this.handleSubmit}

@@ -5,50 +5,57 @@ import { Layout, Menu, Icon, Dropdown, Avatar, Badge} from 'antd'
 // import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons'
 import { DownOutlined } from '@ant-design/icons';
 
-import { getNotificationsList } from '../../actions/notifications'
-import { logout } from '../../actions/user'
 
 
 // 引入自定义的less
 import './frame.less'
 // 引入自己创的logo
 import logo from './logo.png'
-// import qian from './qian.jpg'
-// import dog from './dog.jpg'
 
 import { withRouter } from 'react-router-dom'
 
 import { inject, observer } from 'mobx-react'
+import { toJS } from 'mobx'
 
 const { Header, Content, Sider } = Layout
 
 
-// const mapState = state => {
-//   return {
-//     notificationsCount: state.notifications.list.filter( item => item.hasRead === false).length,
-//     avatar:state.user.avatar,
-//     displayName:state.user.displayName
-//   }
-// }
-
 // 装饰器模式
+@inject('userStore','notifications')
+@observer
 @withRouter
-// @connect(mapState, { getNotificationsList, logout})
 
 class Frame extends Component {
+  constructor( props ){
+    super(props)
+    this.state= {
+      userState :null
+    }
 
-  componentDidMount () {
-    this.props.getNotificationsList() 
   }
 
 
+  componentWilMount () {
+   this.props.notifications.getNotificationsList()
+
+  }
+
+  saveState = () => {
+    if( Boolean(window.localStorage.getItem('authToken')) || Boolean(window.sessionStorage.getItem('authToken'))){
+      const users = window.localStorage.getItem('userInfo') || window.sessionStorage.getItem('userInfo')
+      console.log(users)
+      this.setState ({
+        userState: users
+      })
+    }
+  }
   onMenuClick = ({ key }) => {
 
       this.props.history.push(key)
   }
   onDropdownMenuClick = ({key}) => {
     if ( key ==='/logout') {
-      this.props.logout()
+      this.props.userStore.logout()
     } else {
 
       this.props.history.push(key)
@@ -74,14 +81,16 @@ class Frame extends Component {
     )
   
     render() {
-        // console.log(this.props)
+      const { notifications,userStore } = this.props
+      const user = toJS(userStore.userInfo)
+      console.log(user)
         // 菜单栏的高亮设置
         const selectedKeyArr = this.props.location.pathname.split('/')
         
         // console.log(selectedKeyArr)
         selectedKeyArr.length = 3
 
-        // console.log(selectedKeyArr)
+        // console.log(selectedKeyArr.join('/'))
         return (
         <Layout style={{minHeight: '100%'}}>
           {/*  当重写别人的样式时，不能对其原本的class  而是在其后面再加一个class进行重写*/}
@@ -94,8 +103,8 @@ class Frame extends Component {
 
                 <div onClick={e => e.preventDefault()}>
                 <Badge count={this.props.notificationsCount} offset={[-10,-5]}>
-                  <Avatar src={this.props.avatar} />
-                 <span> 欢迎您！{this.props.displayName}</span>
+                  <Avatar src={user.avatar} />
+                 <span> 欢迎您！{user.displayName}</span>
                 </Badge>
                   <DownOutlined />
                 </div>
